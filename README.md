@@ -16,9 +16,9 @@ ImageNet-pretrained backbone (EfficientNet-B0 / ResNet-50 / ConvNeXt-Tiny)
 ## Data
 | Dataset | Role |
 |---|---|
-| Facial Skin Analysis (Kaggle) | Training labels |
-| ACNE04-v2 | Cross-dataset acne evaluation |
-| SCIN | Skin tone audit |
+| Facial Skin Analysis (Kaggle) | Training labels | [Kaggle](https://www.kaggle.com/datasets/killa92/facial-skin-analysis-and-type-classification) |
+| ACNE04-v2 | Cross-dataset acne evaluation | [Kaggle](https://www.kaggle.com/datasets/karmagames/acne04-v2 dan https://github.com/AIpourlapeau/acne04v2) |
+| SCIN | Skin tone audit | [GitHub](https://github.com/google-research-datasets/scin) |
 
 ## Run
 pip install -r requirements.txt
