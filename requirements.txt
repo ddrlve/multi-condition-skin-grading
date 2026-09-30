@@ -1,0 +1,22 @@
+torch>=2.2
+torchvision>=0.17
+timm>=0.9
+albumentations>=1.4
+opencv-python-headless
+numpy<2          # torch<2.4 wheels are built against the NumPy 1.x ABI
+pandas
+scikit-learn
+scipy
+iterative-stratification
+imagehash
+Pillow
+pyyaml
+tensorboard
+wandb            # optional
+grad-cam         # pytorch-grad-cam
+matplotlib
+seaborn
+streamlit
+tqdm
+pytest
+ruff
