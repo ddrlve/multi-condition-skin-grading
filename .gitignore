@@ -1,0 +1,57 @@
+# === AI coding agent / tooling local state (never share across machines/users) ===
+.claude/
+.claude/settings.local.json
+.remember/
+.mcp.json.local
+.cursor/
+.windsurf/
+.aider*
+CLAUDE.md
+PRD.md
+agent.md
+
+# === Python ===
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+env/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+
+# === Jupyter ===
+.ipynb_checkpoints/
+notebooks/**/.ipynb_checkpoints/
+
+# === Project data & outputs (CLAUDE.md §11 / §4/§5) ===
+# Raw/interim data and experiment outputs are large and non-deterministic to
+# regenerate exactly; only the frozen split manifest is tracked so training
+# runs can verify against it (see CLAUDE.md §4 hash-check requirement).
+data/
+!data/splits/
+data/splits/*
+!data/splits/*.csv
+!data/splits/split_manifest.json
+
+outputs/
+*.pt
+*.pth
+*.ckpt
+
+wandb/
+
+# === Environment / secrets ===
+.env
+.env.*
+kaggle.json
+
+# === OS / editor ===
+.DS_Store
+Thumbs.db
+.idea/
