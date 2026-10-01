@@ -36,7 +36,7 @@ A face rarely has only one skin problem. Single-label classifiers miss co-occurr
 - **Loss:** masked sum of per-head losses (missing labels ignored). Modes: `mse` regression, `wce` class-weighted cross entropy, optional `corn` ordinal.
 - **Baseline:** single-output ResNet-18 trained on acne only with unweighted CE.
 
-## Data
+## Data Used
 
 | Dataset                                      | Role                           | Source                                                                                            |
 | -------------------------------------------- | ------------------------------ | ------------------------------------------------------------------------------------------------- |
