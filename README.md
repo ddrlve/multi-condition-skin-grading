@@ -12,57 +12,21 @@ A face rarely has only one skin problem. Single-label classifiers miss co-occurr
 
 ## Pipeline
 
-End-to-end flow. Training and evaluation run in Kaggle notebooks (T4 GPU); only the demo app runs locally. The test split is untouched until the one-time evaluation in `08_evaluation_test.ipynb`.
+Training and evaluation run in Kaggle notebooks (T4 GPU); only the demo app runs locally. The test split stays untouched until `08_evaluation_test`.
 
 ```mermaid
-flowchart TD
-    subgraph DATA["Phase 1-2: Data (Kaggle, CPU)"]
-        D0[("Facial Skin Analysis dataset")] --> D1["01_eda: audit labels,<br/>select 6 conditions"]
-        D1 --> D2["02_splits: pHash near-duplicate groups,<br/>multilabel-stratified 70/15/15"]
-        D2 --> D3[/"train.csv, val.csv, test.csv<br/>split_manifest.json (SHA-256)"/]
-    end
-
-    subgraph MODEL["Phase 3-4: Model development"]
-        M1["03_baseline_resnet18<br/>single head, acne only, plain CE"]
-        M2["04_model_dev<br/>multi-head net + masked ordinal losses<br/>(synthetic sanity checks, CPU)"]
-    end
-
-    subgraph TRAIN["Phase 5-6: Training (Kaggle T4)"]
-        T0{"Dry-run cell OK?<br/>one batch, 50-step overfit,<br/>time and memory estimate"}
-        T1["05_multihead grid<br/>EfficientNet-B0 / ResNet-50 / ConvNeXt-Tiny<br/>x MSE / WCE loss, 3 seeds"]
-        T2["06_ablations<br/>single vs multi-task,<br/>fine-tuning, imbalance"]
-        T3[("best.pt per run<br/>selected by val mean QWK")]
-        T0 -- "user confirms" --> T1 --> T3
-        T3 --> T2
-    end
-
-    subgraph EVAL["Phase 7-11: Evaluation"]
-        E1["07_evaluation_val<br/>QWK, MAE, macro-F1, bootstrap CI"]
-        E2["08_evaluation_test<br/>one-time locked test run"]
-        E3["09_gradcam<br/>per-head heatmaps"]
-        E4["10_external_eval<br/>ACNE04-v2, Skin Defects"]
-        E5["11_bias_audit_scin<br/>skin-tone audit, proxy metrics"]
-    end
-
-    subgraph APP["Phase 12: Demo (local)"]
-        A1["app/streamlit_app.py<br/>image in, 6 scores + Grad-CAM out<br/>screening aid, not diagnosis"]
-    end
-
-    D3 --> M1
-    D3 --> M2
-    M2 --> T0
-    M1 --> E1
-    T3 --> E1
-    T2 --> E1
-    E1 -- "choose best config" --> E2
-    E2 --> E3
-    E2 --> E4
-    E2 --> E5
-    E3 --> A1
-    E2 --> R[["Report: tables, figures, limitations"]]
-    E4 --> R
-    E5 --> R
+flowchart LR
+    A["Kaggle data"] --> B["01 EDA<br/>pick 6 conditions"]
+    B --> C["02 Splits<br/>grouped, SHA-256 hashed"]
+    C --> D["03-04 Baseline<br/>+ model dev"]
+    D --> E["05-06 Grid training<br/>+ ablations<br/>(dry-run first)"]
+    E --> F["07 Val eval<br/>pick best config"]
+    F --> G["08 Test eval<br/>run once"]
+    G --> H["09-11 Grad-CAM,<br/>external, bias audit"]
+    H --> I["Streamlit app<br/>(local)"]
 ```
+
+## Architecture
 
 Per-image inference path inside the model:
 
@@ -79,27 +43,6 @@ flowchart LR
     B -.-> G["Grad-CAM per head"]
     S --> O["Scores + heatmaps"]
     G --> O
-```
-
-## Architecture
-
-```
-               ┌──────────────────────────────┐
- face image ──▶│  Preprocess (resize, norm)   │
- (224x224)     └──────────────┬───────────────┘
-                              ▼
-               ┌──────────────────────────────┐
-               │ Pretrained backbone (timm)   │  EfficientNet-B0 | ResNet-50 | ConvNeXt-Tiny
-               │ global pooled features  f    │
-               └──────────────┬───────────────┘
-            ┌─────────┬───────┴──┬─────────┬─────────┬─────────┐
-            ▼         ▼          ▼         ▼         ▼         ▼
-         head_1    head_2     head_3    head_4    head_5    head_6     Dropout → Linear
-         (acne)     ...                                                 mse: 1 output
-                                                                        wce: 6 logits
-                                                                        corn: 5 logits
-            ▼         ▼          ▼         ▼         ▼         ▼
-       severity scores 0..5 per condition  +  Grad-CAM per head
 ```
 
 - **Backbone:** ImageNet-pretrained, loaded through `timm`, classifier removed (`num_classes=0`).
@@ -182,11 +125,13 @@ Run the notebooks in this order (matches the phases in `agent.md`):
 1. `01_eda.ipynb` — audit the raw dataset, confirm the label schema against what the proposal assumes, apply the condition-selection rule (PRD §7.1). Stop at the Phase 1 Gate before fixing the final 6 conditions.
 2. `02_splits.ipynb` — pHash-grouped, multilabel-stratified 70/15/15 split. Produces `data/splits/{train,val,test}.csv` and `split_manifest.json` (with a SHA-256 per file) — download and commit these; every later notebook verifies against this hash and refuses to run on a mismatch.
 3. `03_baseline_resnet18.ipynb` — single-output ResNet-18 baseline. Has a dry-run cell (one batch forward/backward, 50-step overfit check, timing/memory estimate) that must be reviewed **before** running the full-training cell.
-4. `04_multihead_<backbone>_<loss>.ipynb` — one notebook per cell of the {EfficientNet-B0, ResNet-50, ConvNeXt-Tiny} × {MSE, WCE} grid. Same dry-run-before-full-run discipline.
-5. `05_ablations.ipynb` — single-task vs multi-task, fine-tuning strategy, imbalance handling.
-6. `06_evaluation.ipynb` — metrics, bootstrap CIs, and all report figures, computed from saved `predictions_{split}.parquet` files.
-7. `07_gradcam.ipynb`, `08_external_eval.ipynb`, `09_bias_audit_scin.ipynb` — interpretability, cross-dataset, and bias analysis.
-8. `app/streamlit_app.py` — run locally against a checkpoint downloaded from Kaggle: `streamlit run app/streamlit_app.py`.
+4. `04_model_dev.ipynb` — multi-head model and losses, sanity-checked on synthetic data (CPU only).
+5. `05_multihead_<backbone>_<loss>.ipynb` — one notebook per cell of the {EfficientNet-B0, ResNet-50, ConvNeXt-Tiny} × {MSE, WCE} grid. Same dry-run-before-full-run discipline.
+6. `06_ablations.ipynb` — single-task vs multi-task, fine-tuning strategy, imbalance handling.
+7. `07_evaluation_val.ipynb` — metrics, bootstrap CIs, and report figures on validation, computed from saved `predictions_{split}.parquet` files.
+8. `08_evaluation_test.ipynb` — the one-time locked test evaluation.
+9. `09_gradcam.ipynb`, `10_external_eval.ipynb`, `11_bias_audit_scin.ipynb` — interpretability, cross-dataset, and bias analysis.
+10. `app/streamlit_app.py` — run locally against a checkpoint downloaded from Kaggle: `streamlit run app/streamlit_app.py`.
 
 Each training notebook logs per-epoch metrics (total + per-head loss, per-head val QWK/MAE/macro-F1, LR, epoch time) to a CSV in `/kaggle/working/` and plots them inline with matplotlib at the end of the run — simpler and more reliable on Kaggle than TensorBoard, whose logs don't survive past the session unless exported manually. Weights & Biases remains available as an opt-in for anyone who wants metrics to persist automatically across Kaggle sessions.
 
