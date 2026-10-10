@@ -1,14 +1,85 @@
-# Multi-Condition Facial Skin Grading Prediction
+# Skin Severity Grader
 
-One face photo in, ordinal severity scores (0 to 5) for six facial skin conditions out, with a Grad-CAM heatmap per condition showing which facial region drove each score.
+Multi-condition facial skin grading: one face photo in, ordinal severity scores (0 to 5) for six facial skin conditions out, with a Grad-CAM heatmap per condition showing which facial region drove each score.
 
-> **Disclaimer.** MOSAIC is an early screening aid built for academic research. It is **not** a medical device and does not diagnose disease. Consult a dermatologist for any clinical decision.
+> **Disclaimer.** Skin Severity Grader is an early screening aid built for academic research. It is **not** a medical device and does not diagnose disease. Consult a dermatologist for any clinical decision.
 
 ---
 
 ## Why
 
-A face rarely has only one skin problem. Single-label classifiers miss co-occurring conditions and their different severity levels. MOSAIC estimates several conditions jointly from one image with a shared backbone and independent heads, and exposes its reasoning through per-head Grad-CAM.
+A face rarely has only one skin problem. Single-label classifiers miss co-occurring conditions and their different severity levels. Skin Severity Grader estimates several conditions jointly from one image with a shared backbone and independent heads, and exposes its reasoning through per-head Grad-CAM.
+
+## Pipeline
+
+End-to-end flow. Training and evaluation run in Kaggle notebooks (T4 GPU); only the demo app runs locally. The test split is untouched until the one-time evaluation in `08_evaluation_test.ipynb`.
+
+```mermaid
+flowchart TD
+    subgraph DATA["Phase 1-2: Data (Kaggle, CPU)"]
+        D0[("Facial Skin Analysis dataset")] --> D1["01_eda: audit labels,<br/>select 6 conditions"]
+        D1 --> D2["02_splits: pHash near-duplicate groups,<br/>multilabel-stratified 70/15/15"]
+        D2 --> D3[/"train.csv, val.csv, test.csv<br/>split_manifest.json (SHA-256)"/]
+    end
+
+    subgraph MODEL["Phase 3-4: Model development"]
+        M1["03_baseline_resnet18<br/>single head, acne only, plain CE"]
+        M2["04_model_dev<br/>multi-head net + masked ordinal losses<br/>(synthetic sanity checks, CPU)"]
+    end
+
+    subgraph TRAIN["Phase 5-6: Training (Kaggle T4)"]
+        T0{"Dry-run cell OK?<br/>one batch, 50-step overfit,<br/>time and memory estimate"}
+        T1["05_multihead grid<br/>EfficientNet-B0 / ResNet-50 / ConvNeXt-Tiny<br/>x MSE / WCE loss, 3 seeds"]
+        T2["06_ablations<br/>single vs multi-task,<br/>fine-tuning, imbalance"]
+        T3[("best.pt per run<br/>selected by val mean QWK")]
+        T0 -- "user confirms" --> T1 --> T3
+        T3 --> T2
+    end
+
+    subgraph EVAL["Phase 7-11: Evaluation"]
+        E1["07_evaluation_val<br/>QWK, MAE, macro-F1, bootstrap CI"]
+        E2["08_evaluation_test<br/>one-time locked test run"]
+        E3["09_gradcam<br/>per-head heatmaps"]
+        E4["10_external_eval<br/>ACNE04-v2, Skin Defects"]
+        E5["11_bias_audit_scin<br/>skin-tone audit, proxy metrics"]
+    end
+
+    subgraph APP["Phase 12: Demo (local)"]
+        A1["app/streamlit_app.py<br/>image in, 6 scores + Grad-CAM out<br/>screening aid, not diagnosis"]
+    end
+
+    D3 --> M1
+    D3 --> M2
+    M2 --> T0
+    M1 --> E1
+    T3 --> E1
+    T2 --> E1
+    E1 -- "choose best config" --> E2
+    E2 --> E3
+    E2 --> E4
+    E2 --> E5
+    E3 --> A1
+    E2 --> R[["Report: tables, figures, limitations"]]
+    E4 --> R
+    E5 --> R
+```
+
+Per-image inference path inside the model:
+
+```mermaid
+flowchart LR
+    I["Face image"] --> P["Resize, center crop,<br/>normalize"]
+    P --> B["Pretrained backbone (timm)<br/>pooled features f"]
+    B --> H1["Head: condition 1"]
+    B --> H2["Head: condition 2"]
+    B --> H3["Heads 3 to 6"]
+    H1 --> S["Severity 0 to 5<br/>per condition"]
+    H2 --> S
+    H3 --> S
+    B -.-> G["Grad-CAM per head"]
+    S --> O["Scores + heatmaps"]
+    G --> O
+```
 
 ## Architecture
 
