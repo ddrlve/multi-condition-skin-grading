@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 320" width="1280" height="320" role="img" aria-labelledby="t d">
+<title id="t">Skin Severity Grader</title>
+<desc id="d">One face photo in, six facial skin conditions graded from 0 to 5. Each facial region links to its own severity gauge.</desc>
+<style>
+.bg{fill:#EEF3F5}
+.ink{fill:#14232C}
+.mute{fill:#51656F}
+.face{fill:none;stroke:#14232C;stroke-opacity:.55;stroke-width:1.5}
+.link{fill:none;stroke:#1B6573;stroke-opacity:.35;stroke-width:1}
+.dot{fill:#1B6573}
+.off{fill:#D3DEE2}
+.num{font:600 13px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;fill:#51656F;font-variant-numeric:tabular-nums}
+.t{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif}
+.seg{animation:seg 420ms cubic-bezier(.23,1,.32,1) backwards}
+@keyframes seg{from{opacity:0;transform:scaleX(.6)}}
+.seg{transform-box:fill-box;transform-origin:left center}
+@media (prefers-reduced-motion:reduce){.seg{animation:none}}
+</style>
+<rect class="bg" width="1280" height="320" rx="20"/>
+<text class="t ink" x="64" y="150" font-size="46" font-weight="650" letter-spacing="-0.92">Skin Severity Grader</text>
+<text class="t mute" x="64" y="188" font-size="19">One face photo in. Six skin conditions graded 0 to 5.</text>
+<text class="t mute" x="64" y="250" font-size="14" letter-spacing="0.14">Screening aid for research, not a diagnosis.</text>
+<ellipse class="face" cx="770" cy="160" rx="74" ry="102"/>
+<path class="link" d="M770 94 C 860 94, 866 66, 894 66"/>
+<path class="link" d="M800 118 C 860 118, 866 102, 894 102"/>
+<path class="link" d="M742 140 C 860 140, 866 138, 894 138"/>
+<path class="link" d="M728 174 C 860 174, 866 174, 894 174"/>
+<path class="link" d="M812 198 C 860 198, 866 210, 894 210"/>
+<path class="link" d="M770 236 C 860 236, 866 246, 894 246"/>
+<circle class="dot" cx="770" cy="94" r="4"/>
+<circle class="dot" cx="800" cy="118" r="4"/>
+<circle class="dot" cx="742" cy="140" r="4"/>
+<circle class="dot" cx="728" cy="174" r="4"/>
+<circle class="dot" cx="812" cy="198" r="4"/>
+<circle class="dot" cx="770" cy="236" r="4"/>
+<rect class="seg" style="animation-delay:0ms" x="904" y="59.0" width="52" height="14" rx="4" fill="#B7DADF"/>
+<rect class="seg" style="animation-delay:28ms" x="962" y="59.0" width="52" height="14" rx="4" fill="#8CC3CB"/>
+<rect class="seg" style="animation-delay:56ms" x="1020" y="59.0" width="52" height="14" rx="4" fill="#5BA6B2"/>
+<rect class="off" x="1078" y="59.0" width="52" height="14" rx="4"/>
+<rect class="off" x="1136" y="59.0" width="52" height="14" rx="4"/>
+<text class="num" x="1198" y="70.5">3</text>
+<rect class="seg" style="animation-delay:84ms" x="904" y="95.0" width="52" height="14" rx="4" fill="#B7DADF"/>
+<rect class="off" x="962" y="95.0" width="52" height="14" rx="4"/>
+<rect class="off" x="1020" y="95.0" width="52" height="14" rx="4"/>
+<rect class="off" x="1078" y="95.0" width="52" height="14" rx="4"/>
+<rect class="off" x="1136" y="95.0" width="52" height="14" rx="4"/>
+<text class="num" x="1198" y="106.5">1</text>
+<rect class="seg" style="animation-delay:112ms" x="904" y="131.0" width="52" height="14" rx="4" fill="#B7DADF"/>
+<rect class="seg" style="animation-delay:140ms" x="962" y="131.0" width="52" height="14" rx="4" fill="#8CC3CB"/>
+<rect class="seg" style="animation-delay:168ms" x="1020" y="131.0" width="52" height="14" rx="4" fill="#5BA6B2"/>
+<rect class="seg" style="animation-delay:196ms" x="1078" y="131.0" width="52" height="14" rx="4" fill="#34838F"/>
+<rect class="off" x="1136" y="131.0" width="52" height="14" rx="4"/>
+<text class="num" x="1198" y="142.5">4</text>
+<rect class="off" x="904" y="167.0" width="52" height="14" rx="4"/>
+<rect class="off" x="962" y="167.0" width="52" height="14" rx="4"/>
+<rect class="off" x="1020" y="167.0" width="52" height="14" rx="4"/>
+<rect class="off" x="1078" y="167.0" width="52" height="14" rx="4"/>
+<rect class="off" x="1136" y="167.0" width="52" height="14" rx="4"/>
+<text class="num" x="1198" y="178.5">0</text>
+<rect class="seg" style="animation-delay:224ms" x="904" y="203.0" width="52" height="14" rx="4" fill="#B7DADF"/>
+<rect class="seg" style="animation-delay:252ms" x="962" y="203.0" width="52" height="14" rx="4" fill="#8CC3CB"/>
+<rect class="off" x="1020" y="203.0" width="52" height="14" rx="4"/>
+<rect class="off" x="1078" y="203.0" width="52" height="14" rx="4"/>
+<rect class="off" x="1136" y="203.0" width="52" height="14" rx="4"/>
+<text class="num" x="1198" y="214.5">2</text>
+<rect class="seg" style="animation-delay:280ms" x="904" y="239.0" width="52" height="14" rx="4" fill="#B7DADF"/>
+<rect class="seg" style="animation-delay:308ms" x="962" y="239.0" width="52" height="14" rx="4" fill="#8CC3CB"/>
+<rect class="seg" style="animation-delay:336ms" x="1020" y="239.0" width="52" height="14" rx="4" fill="#5BA6B2"/>
+<rect class="seg" style="animation-delay:364ms" x="1078" y="239.0" width="52" height="14" rx="4" fill="#34838F"/>
+<rect class="seg" style="animation-delay:392ms" x="1136" y="239.0" width="52" height="14" rx="4" fill="#1B6573"/>
+<text class="num" x="1198" y="250.5">5</text>
+</svg>

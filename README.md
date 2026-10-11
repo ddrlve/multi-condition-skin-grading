@@ -1,4 +1,4 @@
-# Skin Severity Grader
+<h1 align="center"><img src="assets/banner.svg" alt="Skin Severity Grader" width="100%"></h1>
 
 Multi-condition facial skin grading: one face photo in, ordinal severity scores (0 to 5) for six facial skin conditions out, with a Grad-CAM heatmap per condition showing which facial region drove each score.
 
