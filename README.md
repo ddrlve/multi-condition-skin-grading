@@ -156,7 +156,3 @@ Filled in after Phase 7. Test metrics are reported as mean ± std over 3 seeds, 
 ## Team
 
 Dian Rakhmawati Lestari
-
-## License
-
-Code: MIT (or as required by the course). Datasets remain under their original licenses and are used for non-commercial research only.
