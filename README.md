@@ -139,7 +139,7 @@ Each training notebook logs per-epoch metrics (total + per-head loss, per-head v
 
 Filled in after Phase 7. Test metrics are reported as mean ± std over 3 seeds, with 95% bootstrap CIs for the best model.
 
-| Model                      | Loss      | Mean QWK | Mean MAE | Acne QWK |
+| Models                     | Loss      | Mean QWK | Mean MAE | Acne QWK |
 | -------------------------- | --------- | -------- | -------- | -------- |
 | ResNet-18 single-output    | CE        | –        | –        | –        |
 | EfficientNet-B0 multi-head | MSE / WCE | –        | –        | –        |
