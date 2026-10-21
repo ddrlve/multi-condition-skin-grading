@@ -12,7 +12,7 @@ A face rarely has only one skin problem. Single-label classifiers miss co-occurr
 
 ## Pipeline
 
-Training and evaluation run in Kaggle notebooks (T4 GPU); only the demo app runs locally. The test split stays untouched until `08_evaluation_test`.
+Training and evaluation run in Kaggle notebooks (T4 GPU), only the demo app runs locally. The test split stays untouched until `08_evaluation_test`.
 
 ```mermaid
 flowchart LR
