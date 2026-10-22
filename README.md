@@ -150,7 +150,7 @@ Filled in after Phase 7. Test metrics are reported as mean ± std over 3 seeds, 
 
 - Few samples at high severity levels for several conditions.
 - ACNE04-v2 validates only the acne head, on a different grading scale.
-- SCIN has no severity labels; the skin-tone audit uses proxy metrics.
+- SCIN has no severity labels, the skin-tone audit uses proxy metrics.
 - Dark skin tones are underrepresented in the training data.
 
 ## Team
