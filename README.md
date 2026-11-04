@@ -10,7 +10,7 @@ Multi-condition facial skin grading: one face photo in, ordinal severity scores 
 
 A face rarely has only one skin problem. Single-label classifiers miss co-occurring conditions and their different severity levels. Skin Severity Grader estimates several conditions jointly from one image with a shared backbone and independent heads, and exposes its reasoning through per-head Grad-CAM.
 
-## Pipeline
+## Pipelines
 
 Training and evaluation run in Kaggle notebooks (T4 GPU), only the demo app runs locally. The test split stays untouched until `08_evaluation_test`.
 
