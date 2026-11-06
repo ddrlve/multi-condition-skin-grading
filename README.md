@@ -2,7 +2,7 @@
 
 Multi-condition facial skin grading: one face photo in, ordinal severity scores (0 to 5) for six facial skin conditions out, with a Grad-CAM heatmap per condition showing which facial region drove each score.
 
-> **Disclaimer.** Skin Severity Grader is an early screening aid built for academic research. It is **not** a medical device and does not diagnose disease. Consult a dermatologist for any clinical decision.
+> **Disclaimer.** The Skin Severity Grader is an early screening aid built for academic research. It is **not** a medical device and does not diagnose disease. Consult a dermatologist for any clinical decision.
 
 ---
 
@@ -10,7 +10,7 @@ Multi-condition facial skin grading: one face photo in, ordinal severity scores 
 
 A face rarely has only one skin problem. Single-label classifiers miss co-occurring conditions and their different severity levels. Skin Severity Grader estimates several conditions jointly from one image with a shared backbone and independent heads, and exposes its reasoning through per-head Grad-CAM.
 
-## Pipeline
+## Pipelines
 
 Training and evaluation run in self-contained Kaggle notebooks (free-tier T4 GPU); only the demo app runs locally. The test split stays untouched until `08_evaluation_test`.
 
@@ -150,7 +150,7 @@ Filled in after Phase 7. Test metrics are reported as mean ± std over 3 seeds, 
 
 - Few samples at high severity levels for several conditions.
 - ACNE04-v2 validates only the acne head, on a different grading scale.
-- SCIN has no severity labels; the skin-tone audit uses proxy metrics.
+- SCIN has no severity labels, the skin-tone audit uses proxy metrics.
 - Dark skin tones are underrepresented in the training data.
 
 ## Team
